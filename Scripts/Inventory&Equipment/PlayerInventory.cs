@@ -43,6 +43,7 @@ public class PlayerInventory : MonoBehaviour, ISaveable
         {
             return false;
         }
+        GetComponent<ClueCollector>().UpdateCluesCollected(item.itemID);
         slots[i].item = item;
         if (item.IsStackable())
         {
@@ -94,6 +95,14 @@ public class PlayerInventory : MonoBehaviour, ISaveable
         if (inventoryUpdated != null)
         {
             inventoryUpdated();
+        }
+    }
+    public void RemoveAllItems()
+    {
+        for(int i=0;i<slots.Length;i++)
+        {
+            slots[i].number = 0;
+            slots[i].item = null;
         }
     }
     public bool AddItemToSlot(int slot, Item item, int number)
@@ -179,7 +188,6 @@ public class PlayerInventory : MonoBehaviour, ISaveable
                 slotStrings[i].number = slots[i].number;
             }
         }
-        //print(slotStrings[0].itemID);
         return slotStrings;
     }
 

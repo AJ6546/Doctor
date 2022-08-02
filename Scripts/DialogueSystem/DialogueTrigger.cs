@@ -1,20 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DialogueTrigger : MonoBehaviour
 {
-    public Dialogue dialogue;
-    [SerializeField] float radius=5f;
-    public void TriggerDialogue()
+    [SerializeField] List<string> actions=new List<string>();
+    [SerializeField] UnityEvent onTrigger;
+    string actionToTrigger;
+    public void Trigger(string actionToTrigger)
     {
-        FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
+        this.actionToTrigger = actionToTrigger;
+        if (actions.Contains(actionToTrigger))
+        {
+            onTrigger.Invoke();
+        }
     }
-    public float GetTalkingRadius()
+    public string ActionToTrigger()
     {
-        return radius;
-    }
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, radius);
+        return actionToTrigger;
     }
 }

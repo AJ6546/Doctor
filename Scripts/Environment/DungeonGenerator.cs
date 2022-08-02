@@ -4,6 +4,13 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum DungeonStates{
+    inactive,
+    generatingMain,
+    generatingBranches,
+    cleanUp,
+    completed
+};
 public class DungeonGenerator : MonoBehaviour
 {
     [SerializeField] GameObject[] startPrefabs;
@@ -24,12 +31,14 @@ public class DungeonGenerator : MonoBehaviour
     [Header("Generation Limits")]
     [Range(2,100)] [SerializeField] int mainLength=10;
     [Range(0, 50)] [SerializeField] int branchLength=5;
-    [Range(0, 25)] [SerializeField] int numbranches= 10;
+    [Range(0, 25)] [SerializeField] int numBranches= 10;
     [Range(0, 100)] [SerializeField] int doorPercent = 25;
     [Range(0, 1f)] [SerializeField] float constructionDelay;
 
     [Header("Available Runtimes")]
     [SerializeField] List<Tile> generatedTiles = new List<Tile>();
+
+    [HideInInspector] public DungeonStates dungeonState = DungeonStates.inactive;
 
     List<Connecter> availableConnectors = new List<Connecter>();
     Color startLightColor = Color.white;
@@ -50,6 +59,7 @@ public class DungeonGenerator : MonoBehaviour
         tileRoot = CreateStartTile();
         DebugRoomLighting(tileRoot, Color.blue);
         tileTo = tileRoot;
+        dungeonState = DungeonStates.generatingMain;
         for (int i = 0; i < mainLength-1; i++)
         {
             yield return new WaitForSeconds(constructionDelay);
@@ -73,7 +83,8 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
         // Branching
-        for (int b = 0; b < numbranches; b++)
+        dungeonState = DungeonStates.generatingBranches;
+        for (int b = 0; b < numBranches; b++)
         {
             if (availableConnectors.Count > 0)
             {
@@ -100,9 +111,12 @@ public class DungeonGenerator : MonoBehaviour
             }
             else { break; }
         }
+        dungeonState = DungeonStates.cleanUp;
         LightRestoration();
         CleanUpBoxes();
         BlockPassages();
+        dungeonState = DungeonStates.completed;
+        yield return null;
     }
 
     private void BlockPassages()
@@ -325,7 +339,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         if(Input.GetKeyDown(reloadKey))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            FindObjectOfType<Portal>().LoadCurrentScene();
         }
     }
 }

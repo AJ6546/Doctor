@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Shrink : MonoBehaviour, ISaveable
 {
-    [SerializeField] UIAssigner uiAssigner;
     [SerializeField] bool shrink,startTimer,enlarge;
     [SerializeField] ThirdPersonCharacter tpc;
     Vector3 newSize = new Vector3(0.1f, 0.1f, 0.1f);
@@ -12,15 +11,16 @@ public class Shrink : MonoBehaviour, ISaveable
     CooldownTimer cdTimer;
     [SerializeField] TextMeshProUGUI timer;
     [SerializeField] float jumpPower;
+    [SerializeField] KeyCode shrinkButton = KeyCode.C;
     void Start()
     {
-        uiAssigner = GetComponent<UIAssigner>();
         cdTimer = GetComponent<CooldownTimer>();
         tpc = GetComponent<ThirdPersonCharacter>();
         jumpPower = tpc.GetJumpPower();
     }
     void Update()
     {
+        if (GetComponent<Health>().IsDead()) return;
         if (shrink)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, newSize, Time.deltaTime);
@@ -28,6 +28,10 @@ public class Shrink : MonoBehaviour, ISaveable
         else
         {
             transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime);
+        }
+        if(Input.GetKeyDown(shrinkButton))
+        {
+            ShrinkCharacter();
         }
     }
 
@@ -41,7 +45,7 @@ public class Shrink : MonoBehaviour, ISaveable
     }
     void Timer()
     {
-        timer.text = (Mathf.Max(cdTimer.nextActionTime["Action01"] - (int)Time.time, 0)).ToString();
+        timer.text = (Mathf.Max(cdTimer.nextAttackTime["Action01"] - (int)Time.time, 0)).ToString();
     }
 
     IEnumerator UpdateJumpPower()
@@ -50,12 +54,12 @@ public class Shrink : MonoBehaviour, ISaveable
         tpc.SetJupmPower(25);
     }
 
-    public object CaptureState()
+    object ISaveable.CaptureState()
     {
         return new SerializableVector3(transform.localScale);
     }
 
-    public void RestoreState(object state)
+    void ISaveable.RestoreState(object state)
     {
         SerializableVector3 scale = (SerializableVector3)state;
         transform.localScale = scale.ToVector();

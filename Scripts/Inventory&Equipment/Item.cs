@@ -28,7 +28,7 @@ public class Item : ScriptableObject, ISerializationCallbackReceiver
                 itemLookupCache[item.itemID] = item;
             }
         }
-        if (itemID == null || !itemLookupCache.ContainsKey(itemID)) return null;
+        if (itemID == null || !itemLookupCache.ContainsKey(itemID)) {  return null; }
         return itemLookupCache[itemID];
     }
 
@@ -75,5 +75,5 @@ public class Item : ScriptableObject, ISerializationCallbackReceiver
 }
 public enum ItemType
 {
-    Health, PowerUp, Protection, Speed, Clue, None
+    Weapon, Clue, None
 }

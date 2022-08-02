@@ -3,7 +3,7 @@
 public class UIAssigner : MonoBehaviour
 {
     [SerializeField] FixedButton[] fixedButtons;
-    [SerializeField] FixedButton[] fixedButtonsList = new FixedButton[3];
+    [SerializeField] FixedButton[] fixedButtonsList = new FixedButton[9];
     private void Awake()
     {
         fixedButtons = FindObjectsOfType<FixedButton>();     
@@ -18,10 +18,35 @@ public class UIAssigner : MonoBehaviour
             {
                 fixedButtonsList[1] = f;
             }
-            if (f.name == "SceneLoader")
+            if (f.name == "UnequipButton")
             {
                 fixedButtonsList[2] = f;
             }
+            if (f.name == "SaveButton")
+            {
+                fixedButtonsList[3] = f;
+            }
+            if (f.name == "LoadButton")
+            {
+                fixedButtonsList[4] = f;
+            }
+            if (f.name == "Attack01")
+            {
+                fixedButtonsList[5] = f;
+            }
+            if (f.name == "Attack02")
+            {
+                fixedButtonsList[6] = f;
+            }
+            if (f.name == "Attack03")
+            {
+                fixedButtonsList[7] = f;
+            }
+            if (f.name == "Attack04")
+            {
+                fixedButtonsList[8] = f;
+            }
+            
         }
     }
     public FixedButton[] GetFixedButtons()

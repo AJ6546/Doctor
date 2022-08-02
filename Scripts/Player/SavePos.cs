@@ -1,15 +1,17 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SavePos : MonoBehaviour, ISaveable
 {
     [SerializeField] Vector3 pos;
-    [SerializeField] Transform spawnPoint;
-    public object CaptureState()
+    [SerializeField] Transform[] spawnPoint=new Transform[1];
+
+    object ISaveable.CaptureState()
     {
         return new SerializableVector3(transform.position);
     }
 
-    public void RestoreState(object state)
+    void ISaveable.RestoreState(object state)
     {
         SerializableVector3 position = (SerializableVector3)state;
         transform.position = position.ToVector();
@@ -17,7 +19,15 @@ public class SavePos : MonoBehaviour, ISaveable
 
     void Start()
     {
-        transform.position = spawnPoint.position;
-        transform.rotation = spawnPoint.rotation;
+        if (!GetComponent<DayStarter>().HasDayStarted())
+        {
+            transform.position = spawnPoint[1].position;
+            transform.rotation = spawnPoint[1].rotation;
+        }
+        else
+        {
+            transform.position = spawnPoint[0].position;
+            transform.rotation = spawnPoint[0].rotation;
+        }
     }
 }

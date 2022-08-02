@@ -8,10 +8,16 @@ public class Pickup : MonoBehaviour
     PlayerInventory inventory;
     [SerializeField] float pickupRadius = 3f;
     [SerializeField] int number = 1;
+    [SerializeField] bool isWeapon;
     void Awake()
     {
         var player = GameObject.FindGameObjectWithTag("Player");
         inventory = player.GetComponent<PlayerInventory>();
+        if(isWeapon)
+        {
+            Object[] weapons= Resources.LoadAll("Weapons");
+            item = (Item)weapons[Random.Range(0, weapons.Length)];
+        }
     }
     public Item GetItem()
     {

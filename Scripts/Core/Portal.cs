@@ -6,19 +6,14 @@ using UnityEngine.UI;
 
 public class Portal : MonoBehaviour
 {
-    enum DestinationIdentifier
-    {
-        A, B, C, D, E
-    }
     [SerializeField] int buildIndex = -1;
     [SerializeField] Button sceneLoader;
-    [SerializeField] DestinationIdentifier destination;
-    [SerializeField] Transform spawnPoint;
+    [SerializeField] KeyCode interactionKeyboardButton = KeyCode.F;
     [SerializeField] float fadeOutTime = 1f;
     [SerializeField] float fadeInTime = 2f;
     [SerializeField] float fadeWaitTime = 0.5f;
     [SerializeField] int sceneToLoad;
-
+    [SerializeField] bool loadScene=false;
     void Awake()
     {
        buildIndex = SceneManager.GetActiveScene().buildIndex;
@@ -27,6 +22,18 @@ public class Portal : MonoBehaviour
     {
         if(sceneLoader!=null)
             sceneLoader.gameObject.SetActive(false);
+    }
+    private void Update()
+    {
+        if(Input.GetKeyDown(interactionKeyboardButton) && loadScene)
+        {
+            if (sceneToLoad > buildIndex)
+                LoadNextScene();
+            else if (sceneToLoad < buildIndex)
+                LoadPreviousScene();
+            else
+                LoadCurrentScene();
+        }
     }
     public void LoadNextScene()
     {
@@ -66,9 +73,6 @@ public class Portal : MonoBehaviour
 
         savingWrapper.Load();
 
-        // Portal otherPortal = GetOtherPortal();
-        // UpdatePlayer(otherPortal);
-
         savingWrapper.Save();
 
         yield return new WaitForSeconds(fadeWaitTime);
@@ -76,35 +80,20 @@ public class Portal : MonoBehaviour
 
         newPlayerController.enabled = true;
         Destroy(gameObject);
-    }
-    private void UpdatePlayer(Portal otherPortal)
-    {
-        GameObject player = GameObject.FindWithTag("Player");
-        player.transform.position = otherPortal.spawnPoint.position;
-        player.transform.rotation = otherPortal.spawnPoint.rotation;
-    }
-
-    private Portal GetOtherPortal()
-    {
-        foreach (Portal portal in FindObjectsOfType<Portal>())
-        {
-            if (portal == this) continue;
-            if (portal.destination != destination) continue;
-
-            return portal;
-        }
-
-        return null;
+        savingWrapper.Save();
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (sceneLoader!=null && other.CompareTag("Player"))
         {
+            loadScene = true;
             sceneLoader.gameObject.SetActive(true);
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        sceneLoader.gameObject.SetActive(false);
+        loadScene = false;
+        if (sceneLoader != null)
+            sceneLoader.gameObject.SetActive(false);
     }
 }
