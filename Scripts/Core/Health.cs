@@ -7,8 +7,7 @@ public class Health : MonoBehaviour, ISaveable
     [SerializeField]
     float healthPoints, startHealth = 50, regeneratePercent = 70;
     [SerializeField] bool isDead = false; 
-    [SerializeField] Object[] itemList;
-    [SerializeField] string disease, sfx="EnemyDeath";
+    [SerializeField] string  sfx="EnemyDeath";
     [SerializeField] UnityEvent<float> takeDamage;
     [SerializeField] AudioManager audioManager;
     void Start()
@@ -17,8 +16,6 @@ public class Health : MonoBehaviour, ISaveable
         startHealth = GetComponent<CharacterStats>().GetStat(Stats.Health);
         if (healthPoints <= 0||healthPoints>startHealth)
             healthPoints = startHealth;
-        disease = FindObjectOfType<Disease>().GetDisease();
-        itemList = Resources.LoadAll<Item>(disease);
         GetComponent<CharacterStats>().onLevelUp += RegenerateHealth;
     }
 
@@ -79,7 +76,7 @@ public class Health : MonoBehaviour, ISaveable
         else
             sfx = "EnemyDeath";
         audioManager.Play(sfx, transform.position);
-        int num = Random.Range(0, itemList.Length);
+        
         healthPoints = -1f;
         GetComponent<Animator>().SetTrigger("Death");
         if (CompareTag("Player"))
@@ -92,7 +89,7 @@ public class Health : MonoBehaviour, ISaveable
         }
         else
         {
-            GetComponent<ItemDropper>().DropItem((Item)itemList[num]);
+            GetComponent<ClueDropper>().DropClue();
         }
     }
 
@@ -127,16 +124,7 @@ public class Health : MonoBehaviour, ISaveable
         return healthPoints / startHealth;
     }
 
-    public List<string> GetClues()
-    {
-        List<string> clues = new List<string>();
-        foreach (Object item in itemList)
-        {
-            Item itm = (Item)item;
-            clues.Add(itm.itemID);
-        }
-        return clues;
-    }
+ 
     public void UpdateHealth(float updatePercent)
     {
         float hp = healthPoints;

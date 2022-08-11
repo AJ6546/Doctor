@@ -21,6 +21,7 @@ public class Shrink : MonoBehaviour, ISaveable
     void Update()
     {
         if (GetComponent<Health>().IsDead()) return;
+        if (GetComponent<PlayerConversant>().IsTalking()) return;
         if (shrink)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, newSize, Time.deltaTime);

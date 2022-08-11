@@ -30,21 +30,25 @@ public class UIAssigner : MonoBehaviour
             {
                 fixedButtonsList[4] = f;
             }
-            if (f.name == "Attack01")
+            if( f.name == "ControlsButton")
             {
                 fixedButtonsList[5] = f;
             }
-            if (f.name == "Attack02")
+            if (f.name == "Attack01")
             {
                 fixedButtonsList[6] = f;
             }
-            if (f.name == "Attack03")
+            if (f.name == "Attack02")
             {
                 fixedButtonsList[7] = f;
             }
-            if (f.name == "Attack04")
+            if (f.name == "Attack03")
             {
                 fixedButtonsList[8] = f;
+            }
+            if (f.name == "Attack04")
+            {
+                fixedButtonsList[9] = f;
             }
             
         }

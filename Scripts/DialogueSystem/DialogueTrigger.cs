@@ -13,7 +13,7 @@ public class DialogueTrigger : MonoBehaviour
         this.actionToTrigger = actionToTrigger;
         if (actions.Contains(actionToTrigger))
         {
-            onTrigger.Invoke();
+            onTrigger.Invoke();  
         }
     }
     public string ActionToTrigger()

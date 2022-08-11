@@ -1,10 +1,11 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SavingWrapper : MonoBehaviour
 {
-    [SerializeField] KeyCode saveKey = KeyCode.Alpha9;
-    [SerializeField] KeyCode loadKey = KeyCode.Alpha0;
+    [SerializeField] KeyCode saveKey = KeyCode.K;
+    [SerializeField] KeyCode loadKey = KeyCode.L;
     [SerializeField] KeyCode deleteKey = KeyCode.Delete;
     [SerializeField] UIAssigner uiAssigner;
     [SerializeField] FixedButton save, load;
@@ -22,6 +23,8 @@ public class SavingWrapper : MonoBehaviour
 
     private void Update()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 2) return;
+        if (FindObjectOfType<PlayerConversant>().IsTalking()) return;
         if (uiAssigner == null || save == null || load == null)
         {
             uiAssigner = GameObject.FindGameObjectWithTag("Player").GetComponent<UIAssigner>();
@@ -41,7 +44,6 @@ public class SavingWrapper : MonoBehaviour
             Delete();
         }
     }
-
     public void Load()
     {
         GetComponent<SavingSystem>().Load(defaultSaveFile);

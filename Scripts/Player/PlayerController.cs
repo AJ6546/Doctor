@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] FixedJoystick fixedJoystick;
     [SerializeField] UIAssigner uiAssigner;
-    [SerializeField] FixedButton jumpButton, invntoryButton;
-    [SerializeField] KeyCode jumpKeboardButton = KeyCode.Space, inventoryKeyboardButton=KeyCode.I;
+    [SerializeField] FixedButton jumpButton, invntoryButton, controlsButton;
+    [SerializeField] KeyCode jumpKeboardButton = KeyCode.Space, inventoryKeyboardButton=KeyCode.I, controlsKeyboardButton = KeyCode.G;
     [SerializeField] FixedTouchField touchField;
 
     [SerializeField] ThirdPersonUserControl control;
@@ -14,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float cameraAngle, cameraSpeed = 0.2f, rotOffset, touchRate = 0.01f;
     [SerializeField] Vector3 cameraOffset;
 
-    [SerializeField] GameObject inventoryUI;
+    [SerializeField] GameObject inventoryUI, controlsUI;
 
 
     void Awake()
@@ -27,10 +28,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (jumpButton == null || invntoryButton == null)
+        if (SceneManager.GetActiveScene().buildIndex == 2) return;
+        if (jumpButton == null || invntoryButton == null || controlsButton==null)
         {
             jumpButton = uiAssigner.GetFixedButtons()[0];
             invntoryButton = uiAssigner.GetFixedButtons()[1];
+            controlsButton = uiAssigner.GetFixedButtons()[5];
             camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
         if(transform.position.y<=-20f)
@@ -42,14 +45,20 @@ public class PlayerController : MonoBehaviour
         camera.transform.rotation = Quaternion.LookRotation(transform.position + Vector3.up * rotOffset - camera.transform.position, Vector3.up);
         if (touchField.TouchDist.x == 0)
         { cameraOffset.y -= touchField.TouchDist.y * touchRate; }
+        if (GetComponent<PlayerConversant>().IsTalking()) return;
         control.m_Jump = Input.GetKey(jumpKeboardButton) || jumpButton.Pressed;
         bool inventory = Input.GetKey(inventoryKeyboardButton) || invntoryButton.Pressed;
+        bool controls = Input.GetKey(controlsKeyboardButton) || controlsButton.Pressed;
         if (GetComponent<Health>().IsDead()) return;
         control.hInput = Input.GetAxis("Horizontal") + fixedJoystick.Horizontal;
         control.vInput = Input.GetAxis("Vertical") + fixedJoystick.Vertical;
         if(inventory)
         {
             inventoryUI.SetActive(true);
+        }
+        if(controls)
+        {
+            controlsUI.SetActive(true);
         }
     }
 }

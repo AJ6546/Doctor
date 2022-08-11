@@ -8,10 +8,10 @@ public class PlayerConversant : MonoBehaviour
     [SerializeField] string playerName;
 
     Dialogue currentDialogue;
-    [SerializeField] Dialogue testDialogue;
     DialogueNode currentNode=null;
     AIConversant currentConversant = null;
     bool isChoosing = false;
+    [SerializeField]  bool isTalking=false;
 
     public event Action onConversationUpdated;
    
@@ -22,6 +22,7 @@ public class PlayerConversant : MonoBehaviour
         currentNode = currentDialogue.GetRootNode();
         TriggerEnterAction();
         onConversationUpdated();
+        isTalking=true;
     }
 
     public bool IsActive()
@@ -117,10 +118,19 @@ public class PlayerConversant : MonoBehaviour
     public void Quit()
     {
         currentDialogue = null;
+        isTalking = false;
         TriggerExitAction();
         currentNode = null;
         isChoosing = false;
         currentConversant = null;
         onConversationUpdated();
+    }
+    public bool IsTalking()
+    {
+        return isTalking;
+    }
+    public void SetTalking(bool isTalking)
+    {
+        this.isTalking = isTalking;
     }
 }

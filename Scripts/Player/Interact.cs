@@ -55,6 +55,12 @@ public class Interact : MonoBehaviour
                         door.Open();
                     }
                 }
+                if (hit.transform.GetComponent<TV>())
+                {
+                    TV tv = hit.transform.GetComponent<TV>();
+                    transform.LookAt(new Vector3(tv.transform.position.x, transform.position.y, tv.transform.position.z));
+                    FindObjectOfType<Portal>().LoadSceneByIndex(2);
+                }
             }
         }
     }

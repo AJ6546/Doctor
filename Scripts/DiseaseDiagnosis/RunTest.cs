@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RunTest : MonoBehaviour
 {
@@ -14,6 +11,7 @@ public class RunTest : MonoBehaviour
    
     public void Start()
     {
+        FindObjectOfType<PlayerConversant>().SetTalking(false);
         runTestUI.SetActive(false);
         player = GameObject.FindGameObjectWithTag("Player");
         disease = player.GetComponent<Disease>();
@@ -24,6 +22,7 @@ public class RunTest : MonoBehaviour
         runTestUI.SetActive(true);
         player.GetComponent<PlayerController>().enabled = false;
         player.GetComponent<Shrink>().enabled = false;
+        player.GetComponent<PlayerConversant>().SetTalking(true);
     }
     public void OnButtonPressed(string test)
     {
@@ -34,7 +33,7 @@ public class RunTest : MonoBehaviour
                 testResult.text = disease.GetResult(test.ToUpper());
             else
                 testResult.text = "You have not reached the level required to perform this test." +
-                    "Try killing more invaders. You need to be at level "+ levelToRunTest+" to be able to perform" +
+                    "Try killing more invaders. You need to be at level " + levelToRunTest + " to be able to perform" +
                     "this test.";
         }
         else
@@ -46,6 +45,6 @@ public class RunTest : MonoBehaviour
         player.GetComponent<PlayerController>().enabled = true;
         player.GetComponent<Shrink>().enabled = true;
         runTestUI.SetActive(false);
+        player.GetComponent<PlayerConversant>().SetTalking(false);
     }
-   
 }

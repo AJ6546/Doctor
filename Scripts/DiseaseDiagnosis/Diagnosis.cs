@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +24,7 @@ public class Diagnosis : MonoBehaviour
         diagnosisUI.SetActive(true);
         player.GetComponent<PlayerController>().enabled = false;
         player.GetComponent<Shrink>().enabled = false;
+        player.GetComponent<PlayerConversant>().SetTalking(true);
     }
     public void OnEnterDiseasePressed()
     {
@@ -38,7 +38,7 @@ public class Diagnosis : MonoBehaviour
         {
             if (diseaseEntered != disease.GetDisease().ToUpper())
             {
-                StartCoroutine(Diagnose(false)); 
+                StartCoroutine(Diagnose(false));
             }
             else
             {
@@ -76,5 +76,6 @@ public class Diagnosis : MonoBehaviour
             player.GetComponent<DayStarter>().ResetDay(false);
             FindObjectOfType<Portal>().LoadCurrentScene();
         }
+        player.GetComponent<PlayerConversant>().SetTalking(false);
     }
 }

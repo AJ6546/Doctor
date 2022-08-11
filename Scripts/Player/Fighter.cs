@@ -78,10 +78,10 @@ public class Fighter : MonoBehaviour
     {
         if (attack01Button == null || attack02Button == null || attack03Button == null || attack04Button == null)
         {
-            attack01Button = uiAssigner.GetFixedButtons()[5];
-            attack02Button = uiAssigner.GetFixedButtons()[6];
-            attack03Button = uiAssigner.GetFixedButtons()[7];
-            attack04Button = uiAssigner.GetFixedButtons()[8];
+            attack01Button = uiAssigner.GetFixedButtons()[6];
+            attack02Button = uiAssigner.GetFixedButtons()[7];
+            attack03Button = uiAssigner.GetFixedButtons()[8];
+            attack04Button = uiAssigner.GetFixedButtons()[9];
         }
         if (cdTimer.nextAttackTime["Attack01"]
             < Time.time && (Input.GetKeyDown(attack1) || attack01Button.Pressed))
@@ -125,6 +125,7 @@ public class Fighter : MonoBehaviour
         audioMansger.Play(attackSoundEffect, transform.position);
         if (InAttackRange())
         {
+            transform.LookAt(target.transform);
             target.TakeDamage(gameObject, damage+damageModifier);
             audioMansger.Play(sfx, transform.position);
         }

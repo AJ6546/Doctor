@@ -1,28 +1,34 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ClueCollector : MonoBehaviour, ISaveable
 {
     [SerializeField] int cluesCollected=0;
-    [SerializeField] Health health;
     public List<string> clueItems = new List<string>();
     public List<string> collectedClues = new List<string>();
+    [SerializeField] Object[] itemList;
+    [SerializeField] string disease;
     private void Start()
     {
-        health = GetComponent<Health>();
+        disease = GetComponent<Disease>().GetDisease();
+        itemList = Resources.LoadAll<Item>(disease);
     }
     private void Update()
     {
         if(clueItems.Count<=0)
         {
-            clueItems = health.GetClues();
+            clueItems = GetClues();
         }
-        if(clueItems.Count<=collectedClues.Count)
+    }
+    public List<string> GetClues()
+    {
+        List<string> clues = new List<string>();
+        foreach (Object item in itemList)
         {
-            print("You have Collected all the clues");
+            Item itm = (Item)item;
+            clues.Add(itm.itemID);
         }
+        return clues;
     }
     public void UpdateCluesCollected(string itemID)
     {

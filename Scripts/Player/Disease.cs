@@ -354,27 +354,24 @@ public class Disease : MonoBehaviour, ISaveable
 
     void Awake()
     {
-        List<string> diseaseListForCurrentLevel = new List<string>();
-        foreach(string d in diseaseLibrary)
-        {
-            if(CanRunTest(testForDisease[d]))
-            {
-                diseaseListForCurrentLevel.Add(d);
-            }
-        }
-        if (string.IsNullOrEmpty(disease))
-        {
-            disease = diseaseListForCurrentLevel[Random.Range(0, diseaseListForCurrentLevel.Count)];
-        }
+        UpdateDisease();
     }
-
     object ISaveable.CaptureState()
     {
         return disease;
     }
     public void UpdateDisease()
     {
-        disease = diseaseLibrary[Random.Range(0, diseaseLibrary.Count)];
+        List<string> diseaseListForCurrentLevel = new List<string>();
+        foreach (string d in diseaseLibrary)
+        {
+            if (CanRunTest(testForDisease[d]))
+            {
+                diseaseListForCurrentLevel.Add(d);
+            }
+        }
+        disease = diseaseListForCurrentLevel[Random.Range(0, diseaseListForCurrentLevel.Count)];
+       // Debug.Log(disease + "---" + testForDisease[disease] + "---" + levelToRunTest[testForDisease[disease]] + "---" + diseaseListForCurrentLevel.Count);
     }
     void ISaveable.RestoreState(object state)
     {
@@ -390,6 +387,7 @@ public class Disease : MonoBehaviour, ISaveable
     {
         if(test.Equals(testForDisease[disease]))
         {
+            Debug.Log(testForDisease[disease]);
             GetComponent<Experience>().GainExperience(GetDiseaseExperience()/2);
             return "The test revealed that the patient could be suffering from " + disease;
         }

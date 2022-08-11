@@ -27,21 +27,15 @@ public class Portal : MonoBehaviour
     {
         if(Input.GetKeyDown(interactionKeyboardButton) && loadScene)
         {
-            if (sceneToLoad > buildIndex)
-                LoadNextScene();
-            else if (sceneToLoad < buildIndex)
-                LoadPreviousScene();
+            if (sceneToLoad != buildIndex)
+                StartCoroutine(LoadScene(sceneToLoad));
             else
                 LoadCurrentScene();
         }
     }
-    public void LoadNextScene()
+    public void LoadSceneByIndex(int index)
     {
-        StartCoroutine(LoadScene(buildIndex + 1));
-    }
-    public void LoadPreviousScene()
-    {
-        StartCoroutine(LoadScene(buildIndex - 1));
+        StartCoroutine(LoadScene(index));
     }
     public void LoadCurrentScene()
     {
