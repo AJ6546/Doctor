@@ -90,7 +90,9 @@ public class Health : MonoBehaviour, ISaveable
         else
         {
             GetComponent<ClueDropper>().DropClue();
+            FindObjectOfType<Achiever>().UpdateKillCount();
         }
+        transform.position = transform.position + transform.forward * -1f;
     }
 
     public bool IsDead()
@@ -109,13 +111,6 @@ public class Health : MonoBehaviour, ISaveable
         if(healthPoints<0)
         {
             Die();
-        }
-    }
-    void Update()
-    {
-        if(CompareTag("Player")&&Input.GetKeyDown(KeyCode.X)&&!IsDead())
-        {
-            TakeDamage(gameObject,5);
         }
     }
 

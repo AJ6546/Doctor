@@ -25,7 +25,12 @@ public class Portal : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetKeyDown(interactionKeyboardButton) && loadScene)
+        // If Player is in middle of conversation, Do not do below
+        if (FindObjectOfType<PlayerConversant>().IsTalking()) return;
+        // If Player is Saving the game online Do not do below
+        if (FindObjectOfType<OnlineSaveLoadManager>().IsSaving()) return;
+
+        if (Input.GetKeyDown(interactionKeyboardButton) && loadScene)
         {
             if (sceneToLoad != buildIndex)
                 StartCoroutine(LoadScene(sceneToLoad));

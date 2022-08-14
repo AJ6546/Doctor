@@ -20,8 +20,12 @@ public class Shrink : MonoBehaviour, ISaveable
     }
     void Update()
     {
+        // If Player is dead he cannot shrink
         if (GetComponent<Health>().IsDead()) return;
+        // If Player is in the middle of a conversation He cannot shrink
         if (GetComponent<PlayerConversant>().IsTalking()) return;
+        // If Player is Saving the game, He cannot shrink
+        if (FindObjectOfType<OnlineSaveLoadManager>().IsSaving()) return;
         if (shrink)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, newSize, Time.deltaTime);

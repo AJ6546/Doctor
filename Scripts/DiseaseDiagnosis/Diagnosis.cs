@@ -51,11 +51,13 @@ public class Diagnosis : MonoBehaviour
         player.GetComponent<ItemManager>().UnEquip(2);
         player.GetComponent<PlayerInventory>().RemoveAllItems();
         player.GetComponent<ClueCollector>().RemoveCollectedClues();
+        player.GetComponent<Achiever>().UpdateTotalDiseasesDiagnosed();
         diagnosed = true;
         if (correct)
         {
             diseaseDescription.text = "Your diagnosis was correct. You will gain some experience";
             player.GetComponent<Experience>().GainExperience(disease.GetDiseaseExperience());
+            player.GetComponent<Achiever>().UpdateDiagnoseSeucceeded();
         }
         else
         {

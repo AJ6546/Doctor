@@ -22,7 +22,7 @@ public class Interact : MonoBehaviour
                     AIConversant person = hit.transform.GetComponent<AIConversant>();
                     transform.LookAt(new Vector3(person.transform.position.x, transform.position.y, person.transform.position.z));
                    
-                    if (Distance(person.gameObject) <= person.GetTalkingRadius())
+                    if (Distance(person.gameObject) <= person.GetTalkingRadius() && !GetComponent<PlayerConversant>().IsTalking())
                     {
                         Dialogue dialogue = person.GetDialogue();
                         if (dialogue != null)

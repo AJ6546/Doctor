@@ -40,7 +40,10 @@ public class Fighter : MonoBehaviour
         Refill();
         if(enemies.Count>0)
             target = FindNearestEnemy().GetComponent<Health>();
+        // If Player is dead he cannot attack
         if (GetComponent<Health>().IsDead()) return;
+        // If Player is Saving the game He cannot attack
+        if (FindObjectOfType<OnlineSaveLoadManager>().IsSaving()) return;
         Attack();
     }
 

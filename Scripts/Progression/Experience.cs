@@ -32,10 +32,23 @@ public class Experience : MonoBehaviour, ISaveable
     {
         return experiencePoints;
     }
+  
     public float GetMaxExperience()
     {
         return maxExperience;
     }
+
+    public void SetExperience(float experiencePoints)
+    {
+        this.experiencePoints= experiencePoints;
+    }
+
+    public void  SetMaxExperience(float maxExperience)
+    {
+        this.maxExperience=maxExperience;
+    }
+
+    // Saving
     public object CaptureState()
     {
         return experiencePoints;

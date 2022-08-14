@@ -244,7 +244,6 @@ using UnityEngine;
         {
             yield return new WaitForSeconds(lastingTime);
             this.m_MoveSpeedMultiplier -= mod;
-            //GetComponent<CharacterStats>().UpdateSpeed(m_MoveSpeedMultiplier);
         }
 
     public float GetJumpPower()

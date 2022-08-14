@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] float chasingDistance = 3f,attackingDistance=1f,speed=1f;
+    [SerializeField] float chasingDistance = 3f,attackingDistance=1f;
     [SerializeField] Health target;
     [SerializeField] EnemyFighter ef;
     [SerializeField] EnemyMover em;

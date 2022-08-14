@@ -337,7 +337,11 @@ public class DungeonGenerator : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(reloadKey))
+        // If Player is talking, Do not do below
+        if (FindObjectOfType<PlayerConversant>().IsTalking()) return;
+        // If Player is Saving the game online Do not do below
+        if (FindObjectOfType<OnlineSaveLoadManager>().IsSaving()) return;
+        if (Input.GetKeyDown(reloadKey))
         {
             FindObjectOfType<Portal>().LoadCurrentScene();
         }
