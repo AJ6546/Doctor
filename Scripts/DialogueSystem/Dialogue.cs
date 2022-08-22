@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+// Scriptable Object used to create new dialogues
 [CreateAssetMenu(fileName ="New Dialogue",menuName ="Dialogue", order =0)]
 public class Dialogue : ScriptableObject, ISerializationCallbackReceiver
 {
@@ -15,6 +15,8 @@ public class Dialogue : ScriptableObject, ISerializationCallbackReceiver
     {
         OnValidate();
     }
+    
+    // Clears and rebuilds nodes
     void OnValidate()
     {
         nodeLookup.Clear();
@@ -23,6 +25,8 @@ public class Dialogue : ScriptableObject, ISerializationCallbackReceiver
             nodeLookup[node.name] = node;
         }
     }
+
+    // Getters
     public IEnumerable<DialogueNode> GetAllNodes()
     {
         return nodes;
@@ -72,8 +76,6 @@ public class Dialogue : ScriptableObject, ISerializationCallbackReceiver
         Undo.RecordObject(this, "Added Dialogue Node");
         AddNode(newNode);
     }
-
-    
 
     public void DeleteNode(DialogueNode nodeToDelete)
     {

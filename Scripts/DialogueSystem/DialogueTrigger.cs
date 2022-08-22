@@ -5,6 +5,8 @@ using UnityEngine.Events;
 
 public class DialogueTrigger : MonoBehaviour
 {
+    // Sets up enter and exit node triggers.
+    // Used to open run test and diagnosis pop up at the end of a conversation
     [SerializeField] List<string> actions=new List<string>();
     [SerializeField] UnityEvent onTrigger;
     string actionToTrigger;

@@ -15,25 +15,30 @@ public class PlayerConversant : MonoBehaviour
 
     public event Action onConversationUpdated;
    
+    // Starts a dialoge
     public void StartDialogue(AIConversant newConversant,Dialogue newDialogue)
     {
-        currentConversant = newConversant;
-        currentDialogue = newDialogue;
-        currentNode = currentDialogue.GetRootNode();
-        TriggerEnterAction();
-        onConversationUpdated();
-        isTalking=true;
+        currentConversant = newConversant; // sets up the conversant
+        currentDialogue = newDialogue; // sets up dialogue
+        currentNode = currentDialogue.GetRootNode(); // sets up dialogue node
+        TriggerEnterAction(); // triggers enter action if any
+        onConversationUpdated(); // Used to update ui 
+        isTalking=true; // sets isTalking to restrict action while in conversation
     }
 
+    // returns true if there is a dialogue and false otherwise
     public bool IsActive()
     {
         return currentDialogue != null;
     }
+
+    // returns true if player is choosing from options
     public bool IsChoosing()
     {
         return isChoosing;
     }
 
+    // returns the text in current node.
     public string GetText()
     {
         if(currentNode == null)
@@ -43,11 +48,13 @@ public class PlayerConversant : MonoBehaviour
         return currentNode.GetText();
     }
 
+    // All options the player can choose from
     public IEnumerable<DialogueNode> GetChoices()
     {
         return currentDialogue.GetPlayerChildren(currentNode);
     }
 
+    // Takes the conversation depending on palyer's choice
     public void SelectChoice(DialogueNode chosenNode)
     {
         currentNode = chosenNode;
@@ -56,6 +63,7 @@ public class PlayerConversant : MonoBehaviour
         Next();
     }
 
+    // Name of person talking to be displayed in ui
     public string GetCurrentConversantName()
     {
         if(IsChoosing())
@@ -71,6 +79,7 @@ public class PlayerConversant : MonoBehaviour
     public void Next()
     {
         int numPlayerResponses = currentDialogue.GetPlayerChildren(currentNode).Count();
+        // If there are more than 1 responses isChoosing is set true
         if(numPlayerResponses>0)
         {
             isChoosing = true;
@@ -115,6 +124,7 @@ public class PlayerConversant : MonoBehaviour
         }
     }
 
+    // Quitting a conversation
     public void Quit()
     {
         currentDialogue = null;
@@ -125,6 +135,8 @@ public class PlayerConversant : MonoBehaviour
         currentConversant = null;
         onConversationUpdated();
     }
+
+    // Getting and setting isTaking.
     public bool IsTalking()
     {
         return isTalking;

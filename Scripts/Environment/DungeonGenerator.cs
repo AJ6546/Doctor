@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum DungeonStates{
     inactive,
@@ -15,12 +14,10 @@ public class DungeonGenerator : MonoBehaviour
 {
     [SerializeField] GameObject[] startPrefabs;
     [SerializeField] GameObject[] tilePrefabs;
-    [SerializeField] GameObject[] exitPrefabs;
     [SerializeField] GameObject[] blockedPrefabs;
-    [SerializeField] GameObject[] doorPrefabs;
 
     [Header("Debugging Options")]
-    [SerializeField] bool useBoxCollidoers;
+    [SerializeField] bool useBoxColliders;
     [SerializeField] bool useLightsForDebugging;
     [SerializeField] bool restoreLightsAfterDebugging;
 
@@ -51,19 +48,20 @@ public class DungeonGenerator : MonoBehaviour
         StartCoroutine(DungeonBuild());
     }
 
+    // Build dungeon
     IEnumerator DungeonBuild()
     {
         GameObject goContainer = new GameObject("Main Path");
         container = goContainer.transform;
         container.SetParent(transform);
-        tileRoot = CreateStartTile();
-        DebugRoomLighting(tileRoot, Color.blue);
-        tileTo = tileRoot;
-        dungeonState = DungeonStates.generatingMain;
+        tileRoot = CreateStartTile(); // Starting tile is special and has only 1 connector
+        DebugRoomLighting(tileRoot, Color.blue); // set lighting for the room
+        tileTo = tileRoot; // tileTo is now starting room
+        dungeonState = DungeonStates.generatingMain; // stting state 
         for (int i = 0; i < mainLength-1; i++)
         {
             yield return new WaitForSeconds(constructionDelay);
-            tileFrom = tileTo;
+            tileFrom = tileTo; // In the begining tile from will be starting room
             tileTo = CreateTile();
             DebugRoomLighting(tileTo, Color.red);
             ConnectTiles();
@@ -84,23 +82,24 @@ public class DungeonGenerator : MonoBehaviour
         }
         // Branching
         dungeonState = DungeonStates.generatingBranches;
-        for (int b = 0; b < numBranches; b++)
+        for (int b = 0; b < numBranches; b++) // looping over number of branches
         {
             if (availableConnectors.Count > 0)
             {
-                goContainer = new GameObject("Branch " + (b + 1));
+                goContainer = new GameObject("Branch " + (b + 1)); // naming branches
                 container = goContainer.transform;
                 container.SetParent(transform);
                 int availIndex = Random.Range(0, availableConnectors.Count);
                 tileRoot = availableConnectors[availIndex].transform.parent.parent;
                 availableConnectors.RemoveAt(availIndex);
                 tileTo = tileRoot;
-                for (int i = 0; i < branchLength - 1; i++)
+                for (int i = 0; i < branchLength - 1; i++) // looping through branch length for each branch
                 {
                     yield return new WaitForSeconds(constructionDelay);
                     tileFrom = tileTo;
-                    tileTo = CreateTile();
+                    tileTo = CreateTile(); // creating new room
                     DebugRoomLighting(tileTo, Color.green);
+                    // connecting rooms
                     ConnectTiles();
                     CollisionCheck();
                     if (attempts >= maxAttempts)
@@ -111,14 +110,17 @@ public class DungeonGenerator : MonoBehaviour
             }
             else { break; }
         }
+        // stting dungeon state
         dungeonState = DungeonStates.cleanUp;
         LightRestoration();
         CleanUpBoxes();
         BlockPassages();
+        // stting dungeon state
         dungeonState = DungeonStates.completed;
         yield return null;
     }
 
+    // Blocking unconnected connectors
     private void BlockPassages()
     {
         foreach(Connecter connecter in  transform.GetComponentsInChildren<Connecter>())
@@ -138,8 +140,11 @@ public class DungeonGenerator : MonoBehaviour
     Transform CreateStartTile()
     {
         int index = Random.Range(0, startPrefabs.Length);
-        GameObject goTile = Instantiate(startPrefabs[index], Vector3.zero, Quaternion.identity, container) as GameObject;
+        // Instantiating the starting room
+        GameObject goTile = Instantiate(startPrefabs[index], Vector3.zero, 
+            Quaternion.identity, container) as GameObject;
         goTile.name = "Start Room";
+        // Setting the y rotation of the room to be 0, 90, 270 or 360
         float yRot = Random.Range(0, 4) * 90f;
         goTile.transform.Rotate(0, yRot, 0);
         // Add to generatedTiles
@@ -150,20 +155,27 @@ public class DungeonGenerator : MonoBehaviour
     Transform CreateTile()
     {
         int index = Random.Range(0, tilePrefabs.Length);
-        GameObject goTile = Instantiate(tilePrefabs[index], Vector3.zero, Quaternion.identity, container) as GameObject;
+        // Instantiate a new room
+        GameObject goTile = Instantiate(tilePrefabs[index], 
+            Vector3.zero, Quaternion.identity, container) as GameObject;
         goTile.name = tilePrefabs[index].name;
         // Add to generatedTiles
-        Transform origin = generatedTiles[generatedTiles.FindIndex(x => x.tile == tileFrom)].tile;
+        Transform origin = generatedTiles[generatedTiles.
+            FindIndex(x => x.tile == tileFrom)].tile;
+        // Adding to generated tiles list
         generatedTiles.Add(new Tile(goTile.transform, origin));
         return goTile.transform;
     }
 
     void ConnectTiles()
     {
+        // checking for unconnected connectors to and from tiles
         Transform connectFrom = GetRandomConnector(tileFrom);
         if (connectFrom == null) return;
         Transform connectTo = GetRandomConnector(tileTo);
         if (connectTo == null) return;
+
+        // connecting
         connectTo.SetParent(connectFrom);
         tileTo.SetParent(connectTo);
         connectTo.localPosition = Vector3.zero;
@@ -177,15 +189,20 @@ public class DungeonGenerator : MonoBehaviour
     Transform GetRandomConnector(Transform tile)
     {
         if(tile==null) return null;
+
+        // find all unconnected connectors of the tile
         List<Connecter> connectorList = tile.GetComponentsInChildren<Connecter>().ToList().
             FindAll(x=>x.IsConnected()==false);
         if(connectorList.Count>0)
         {
+            //select a random connector from the tile
             int connecterIndex = Random.Range(0, connectorList.Count);
+            //setting isConnected on that connector
             connectorList[connecterIndex].SetConnected(true);
             if(tile==tileFrom)
             {
                 BoxCollider box = GetComponent<BoxCollider>();
+                // creating box collider and setting isTrigger if the room do not already have one
                 if(box==null)
                 {
                     box = tile.gameObject.AddComponent<BoxCollider>();
@@ -197,9 +214,10 @@ public class DungeonGenerator : MonoBehaviour
         return null;
     }
 
+    // Destroy box colliders after dungeon is built.
     void CleanUpBoxes()
     {
-        if(!useBoxCollidoers)
+        if(!useBoxColliders)
         {
             foreach(Tile myTile in generatedTiles)
             {
@@ -307,6 +325,8 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
     }
+
+
     void DebugRoomLighting(Transform tile, Color lightColor)
     {
         if(useLightsForDebugging && Application.isEditor)
@@ -341,6 +361,7 @@ public class DungeonGenerator : MonoBehaviour
         if (FindObjectOfType<PlayerConversant>().IsTalking()) return;
         // If Player is Saving the game online Do not do below
         if (FindObjectOfType<OnlineSaveLoadManager>().IsSaving()) return;
+        // Reload the same scene
         if (Input.GetKeyDown(reloadKey))
         {
             FindObjectOfType<Portal>().LoadCurrentScene();

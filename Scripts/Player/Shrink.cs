@@ -26,14 +26,18 @@ public class Shrink : MonoBehaviour, ISaveable
         if (GetComponent<PlayerConversant>().IsTalking()) return;
         // If Player is Saving the game, He cannot shrink
         if (FindObjectOfType<OnlineSaveLoadManager>().IsSaving()) return;
+   
         if (shrink)
         {
+            // reducing size of player
             transform.localScale = Vector3.Lerp(transform.localScale, newSize, Time.deltaTime);
         }
         else
         {
+            // getting back to original size of player
             transform.localScale = Vector3.Lerp(transform.localScale, originalScale, Time.deltaTime);
         }
+
         if(Input.GetKeyDown(shrinkButton))
         {
             ShrinkCharacter();
@@ -42,16 +46,15 @@ public class Shrink : MonoBehaviour, ISaveable
 
     public void ShrinkCharacter()
     {
+        // Resetting shrink
         shrink = !shrink;
+        // Increase jum power on shrink and get it back to normal on button press
         if (shrink)
             StartCoroutine(UpdateJumpPower());
         else
             tpc.SetJupmPower(jumpPower);
     }
-    void Timer()
-    {
-        timer.text = (Mathf.Max(cdTimer.nextAttackTime["Action01"] - (int)Time.time, 0)).ToString();
-    }
+
 
     IEnumerator UpdateJumpPower()
     {
@@ -59,11 +62,12 @@ public class Shrink : MonoBehaviour, ISaveable
         tpc.SetJupmPower(25);
     }
 
+    // Saving the player size
     object ISaveable.CaptureState()
     {
         return new SerializableVector3(transform.localScale);
     }
-
+    // Loading pkayer size
     void ISaveable.RestoreState(object state)
     {
         SerializableVector3 scale = (SerializableVector3)state;

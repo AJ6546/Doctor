@@ -22,6 +22,13 @@ public class Progression : ScriptableObject
         float[] levels = lookupTable[characterClass][stat];
         return levels.Length;
     }
+    
+    // Creating a Dictionary LookupTable
+    // Loops over all the ProgressionCharacterClass elements.
+    // Inside this we loop through all the ProgressionStat in each ProgressionCharacterClass 
+    // and add them to a dictionary called statLookupTable, with the stat type as key and level as value.
+    // Then for each ProgressionCharacterClass we have another dictionary lookupTable which takes character type 
+    // as key and its statLookupTable as value.
     private void BuildLookup()
     {
         if (lookupTable != null) return;
@@ -37,10 +44,7 @@ public class Progression : ScriptableObject
         }
     }
 
-    public float GetExperience()
-    {
-        return 10;
-    }
+    // Represents each Character Calls and their stats that progresses over time.
     [System.Serializable]
     class ProgressionCharacterClass
     {
@@ -48,6 +52,8 @@ public class Progression : ScriptableObject
 
         public ProgressionStat[] stats;
     }
+
+    // Represents each stats and their value depending on the level
     [System.Serializable]
     class ProgressionStat
     {

@@ -9,21 +9,26 @@ public class AIConversant : MonoBehaviour
     [SerializeField] float talkingRadius = 5f;
     [SerializeField] string conversantName;
 
+    // This is the radius within which player can talk with this AI
     public float GetTalkingRadius()
     {
         return talkingRadius;
     }
 
-    public Dialogue GetDialogue()
-    {
-        return dialogue;
-    }
+   
+
+    // Visual representation of talking distance
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, talkingRadius);
     }
 
+    // Getters
+    public Dialogue GetDialogue()
+    {
+        return dialogue;
+    }
     public string GetConversantName()
     {
         return conversantName;

@@ -1,7 +1,4 @@
-using System;
-using UnityEngine;
-
-[Serializable]
+// These are the data that needs saving to firebase
 public class PlayerData
 {
     public string _userid;

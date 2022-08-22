@@ -1,6 +1,6 @@
 using Cinemachine;
 using UnityEngine;
-
+// Used to play a cenmatic intro when the player starts the game for the first time
 public class OnLoad : MonoBehaviour
 {
     [SerializeField] Camera camera;
@@ -16,7 +16,7 @@ public class OnLoad : MonoBehaviour
             OnGameStart();
     }
 
-    
+    // when start game button is pressed
     public void OnGameStart()
     {
         camera.GetComponent<CinemachineBrain>().enabled = false;
@@ -24,6 +24,7 @@ public class OnLoad : MonoBehaviour
         introUi.enabled = false;
         FindObjectOfType<IntroPlayer>().SetPlayed(true);
     }
+    // When replay button is pressed
     public void OnReplay()
     {
         GameObject.FindObjectOfType<Portal>().LoadCurrentScene();

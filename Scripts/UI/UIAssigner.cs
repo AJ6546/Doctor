@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+// used to create an array of all fixed buttons and set them in a specific order,
+// so they can be used fro other scripts by getting the index of the array element
 public class UIAssigner : MonoBehaviour
 {
     [SerializeField] FixedButton[] fixedButtons;
@@ -53,6 +55,8 @@ public class UIAssigner : MonoBehaviour
             
         }
     }
+
+    // Returs an array of all the fixed buttons
     public FixedButton[] GetFixedButtons()
     {
         return fixedButtonsList;

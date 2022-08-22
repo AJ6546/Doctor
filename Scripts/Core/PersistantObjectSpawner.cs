@@ -6,6 +6,7 @@ public class PersistantObjectSpawner : MonoBehaviour
 {
     [SerializeField] GameObject persistentObjectPrefab = null;
 
+    // Used to have persist objects between scene
     static bool hasSpawned = false;
     private void Awake()
     {

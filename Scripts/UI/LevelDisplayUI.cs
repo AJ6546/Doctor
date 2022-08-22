@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-
+// Displays current level of the player in UI
 public class LevelDisplayUI : MonoBehaviour
 {
     [SerializeField] CharacterStats characterStat;

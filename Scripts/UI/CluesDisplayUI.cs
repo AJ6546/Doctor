@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 
+// Displays collected clues/ total clues in ui
 public class CluesDisplayUI : MonoBehaviour
 {
     [SerializeField] ClueCollector clueCollector;

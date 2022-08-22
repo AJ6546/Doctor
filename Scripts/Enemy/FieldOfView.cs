@@ -12,7 +12,7 @@ public class FieldOfView : MonoBehaviour
     public List<Transform> listOfTargets = new List<Transform>();
     private void Start()
     {
-        StartCoroutine(FindTargetsWithDelay(0.2f));
+
         viewMesh = new Mesh();
         viewMesh.name = "ViewMesh";
         viewMeshFilter.mesh = viewMesh;
@@ -20,6 +20,7 @@ public class FieldOfView : MonoBehaviour
 
     private void LateUpdate()
     {
+        // do not draw field of view for dead characters
         
         if (GetComponent<Health>() && GetComponent<Health>().IsDead())
         {
@@ -29,14 +30,6 @@ public class FieldOfView : MonoBehaviour
             return; }
         DrawFieldOfView();
     }
-    IEnumerator FindTargetsWithDelay(float delay)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(delay);
-        }
-    }
-    
 
     public Vector3 DirectionFromAngle(float angleInDegrees, bool angleIsGlobal)
     {
@@ -47,6 +40,7 @@ public class FieldOfView : MonoBehaviour
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 
+    // used to draw field of view
     void DrawFieldOfView()
     {
         int stepCount = Mathf.RoundToInt(viewAngle * meshResolution);

@@ -1,7 +1,7 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 
+// Displays a messge with current date at the begining of each new round
 public class DayStarterUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI dayStarterText;

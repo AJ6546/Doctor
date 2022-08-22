@@ -1,27 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+// A scriptable object inheriting from Item
 [CreateAssetMenu(menuName = "Inventory/Equipment")]
 public class Equipment : Item
 {
-    public EquipmentSlot equipmentSlot;
-    public GameObject equipedPrefab1 = null;
+    public EquipmentSlot equipmentSlot; // slot where the item can be equiped
+
+    // position and rotation of equiped item/s
+    public GameObject equipedPrefab1 = null; 
     public GameObject equipedPrefab2 = null;
+
+    // If the item goes in rightHand or not
     public bool isRightHanded;
+
+    // Used to change animation when player is holding an item (weapon)
     public AnimatorOverrideController overrideController = null;
-    public float armorModifier = 0;
-    public float speedModifier = 0;
+
+    // Increase in damage player causes while holding the item
     public float damageModifier = 0;
-    public float healthModifier;
-    public Sprite[] attackButtons = new Sprite[5];
+
     public override void Use()
     {
         FindObjectOfType<ItemManager>().Equip(this);
     }
-
 }
+
+// Enumeratior for different slots where an item goes
 public enum EquipmentSlot
 {
     head, legs, hands, chest, feet

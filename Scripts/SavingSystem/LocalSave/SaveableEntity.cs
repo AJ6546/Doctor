@@ -14,6 +14,8 @@ using UnityEngine;
             return uniqueIdentifier;
         }
 
+        // Loops through all the scripts on the gameobject that has ISaveable and adds
+        // the datatype as key and the field as value to a dictionary
         public object CaptureState()
         {
             Dictionary<string, object> state = new Dictionary<string, object>();

@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-
+// Displays current experience/ Exp required to level up
 public class ExperienceDisplayUI : MonoBehaviour
 {
     [SerializeField] Experience experience;

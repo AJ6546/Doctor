@@ -7,6 +7,8 @@ public class Door : MonoBehaviour
     [SerializeField] GameObject door;
     [SerializeField] float doorRadius = 10f;
     [SerializeField] float doorWaitTime=2f;
+
+    // sets door to inactive
      public void Open()
     {
         StartCoroutine(Close(doorWaitTime));
@@ -14,6 +16,7 @@ public class Door : MonoBehaviour
 
     }
 
+    // sets door to active with a delay
    IEnumerator Close(float time)
     {
         yield return new WaitForSeconds(time);
@@ -24,6 +27,8 @@ public class Door : MonoBehaviour
     {
         return doorRadius;
     }
+
+    // Visualizing the radius within which door can be opened from
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;

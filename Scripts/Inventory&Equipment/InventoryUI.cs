@@ -17,6 +17,8 @@ public class InventoryUI : MonoBehaviour
         Redraw();
     }
 
+    // Called whenever the inventory is updated.
+    // Redraws the whole inventory to include changes
     private void Redraw()
     {
         foreach (Transform child in transform)

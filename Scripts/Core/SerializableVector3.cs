@@ -3,6 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class SerializableVector3
 {
+    // Used to serialize position (Vector 3) when saving
     float x, y, z;
     public SerializableVector3(Vector3 vector)
     {

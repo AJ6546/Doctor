@@ -84,8 +84,6 @@ public class DialogueNode: ScriptableObject
         isPlayerSpeaking = newIsPlayerSpeaking;
         EditorUtility.SetDirty(this);
     }
-
-
 #endif
 
 }

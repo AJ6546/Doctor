@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -31,15 +29,18 @@ public class DialogueEditor : EditorWindow
     const float canvasSize = 4000;
     const float backgroundSize = 50;
 
+    // Callback to open the Dialogue editor window from Windows tab
     [MenuItem("Window/Dialogue Editor")]
     public static void ShowEditorWindow()
     {
         GetWindow(typeof(DialogueEditor), false, "DialogueEditor");
     }
 
+    // Adding this attribute to a static method will make the method be called when unity is about to open an asset
     [OnOpenAsset(1)]
     public static bool OnOpenAsset(int instanceID, int line)
     {
+        // Only call the method when a dialogue scriptable object is opened
         Dialogue dialogue = EditorUtility.InstanceIDToObject(instanceID) as Dialogue;
         if(dialogue!=null)
         {
@@ -74,8 +75,11 @@ public class DialogueEditor : EditorWindow
         }
             
     }
+
+    // OnGUI is called for rendering and handling GUI events.
     private void OnGUI()
     {
+        // Autolayout helps draw the fields on GUI in the order they are presented
         if (selectedDialogue == null)
             EditorGUILayout.LabelField("No Dialogue selected");
         else
@@ -115,36 +119,53 @@ public class DialogueEditor : EditorWindow
    
     private void ProcessEvents()
     {
+        // When we click on the mouse while no node is seleced
         if(Event.current.type == EventType.MouseDown && draggingNode==null)
         {
+            // Search for nodes at point of mouse click
             draggingNode = GetNodeAtPoint(Event.current.mousePosition+scrollPosition);
+
+            // If a node was found at point of mouse click
             if(draggingNode!=null)
             {
+                // Setting dragging offser
                 draggingOffset = draggingNode.GetRect().position - Event.current.mousePosition;
+
+                // Setting Active Objeect as dragging node
                 Selection.activeObject = draggingNode;
             }
+            // if a node was not found
             else
             {
+                // dragging canvas is set true
                 draggingCanvas = true;
+                // Setting dragging canvas offset
                 draggingCanvasOffset = Event.current.mousePosition + scrollPosition;
+                // Setting active object to selected dialogue
                 Selection.activeObject = selectedDialogue;
+                // We basically scroll in the editor window
             }
         }
+        // if we are dragging and dragging node is not null
         else if(Event.current.type == EventType.MouseDrag && draggingNode!=null)
         {
-            
+            // setting the position of dragging node to mouse position + offset
             draggingNode.SetPosition(Event.current.mousePosition + draggingOffset);
             GUI.changed = true;
         }
+        // if we are dragging and dragging node is null
         else if (Event.current.type == EventType.MouseDrag && draggingCanvas)
         {
+            // setting the scroll position to offset - mouse position
             scrollPosition = draggingCanvasOffset - Event.current.mousePosition;
             GUI.changed = true;
         }
+        // when mouse up and dragging node is not null we set dragging node to null
         else if(Event.current.type == EventType.MouseUp && draggingNode!=null)
         {
             draggingNode = null;
         }
+        // when mouse up and dragging canvas is true we set dragging canvas to false
         else if (Event.current.type == EventType.MouseUp && draggingCanvas)
         {
             draggingCanvas = false;
@@ -222,6 +243,10 @@ public class DialogueEditor : EditorWindow
         }
     }
 
+
+    // Links are drawn using Bazier curves from the xMax on x axis and center point in y axis
+    // of RectTransform of parent node to the xMin on x axis and center point in y axis 
+    // of RectTransform of child node
     private void DrawConnections(DialogueNode node)
     {
         Vector3 startPosition = new Vector2(node.GetRect().xMax, node.GetRect().center.y);

@@ -1,9 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Deactivate : MonoBehaviour
 {
+    // Deactivates an object after a certain time.
     public void Disable() => StartCoroutine(Disable(2f));
     IEnumerator Disable(float time)
     {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Connecter : MonoBehaviour
@@ -15,7 +13,7 @@ public class Connecter : MonoBehaviour
         Gizmos.color = isConnected ? Color.green : Color.red;
         if (!isPlaying)
         { Gizmos.color = Color.cyan; }
-        Vector2 halfsize = size * 0.5f;
+        Vector2 halfsize = size * 0.5f; // So that we start drawing from the middle
         Vector3 offset = transform.position + transform.up * halfsize.y;
         Gizmos.DrawLine(offset, offset + transform.forward);
 
@@ -28,6 +26,7 @@ public class Connecter : MonoBehaviour
         Vector3 botRight = transform.position + side;
         Vector3 botLeft = transform.position - side;
 
+        // Drawing the square
         Gizmos.DrawLine(topRight, topLeft);
         Gizmos.DrawLine(topLeft, botLeft);
         Gizmos.DrawLine(botLeft, botRight);

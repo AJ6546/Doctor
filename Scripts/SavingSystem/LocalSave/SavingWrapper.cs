@@ -36,15 +36,15 @@ public class SavingWrapper : MonoBehaviour
         }
         if (Input.GetKeyDown(saveKey) || save.Pressed)
         {
-            Save();
+            Save(); // Save Data on button press
         }
         if (Input.GetKeyDown(loadKey)|| load.Pressed)
         {
-            Load();
+            Load(); // Load Data on button press
         }
         if (Input.GetKeyDown(deleteKey))
         {
-            Delete();
+            Delete(); // Delete Saved Data on button press
         }
     }
     public void Load()

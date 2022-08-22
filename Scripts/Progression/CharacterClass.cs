@@ -1,3 +1,4 @@
+// Different types of characters
 public enum CharacterClass
 {
     Player,

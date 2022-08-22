@@ -17,18 +17,14 @@ public class EnemyFighter : MonoBehaviour
         audioManager = AudioManager.instance;
         animator = GetComponent<Animator>();
         cdTimer = GetComponent<CooldownTimer>();
+        // Enemy always targets player
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
     }
-    private void Update()
-    {
-        //if (AtDamagingDistance())
-        //{
-        //    transform.LookAt(target.transform);
-        //    AttackBehaviour(); }
-    }
+
     #region EnemyAttack
     public void AttackBehaviour()
     {
+        // Don't attack if player is already dead
         if (target.IsDead())
         {
             animator.ResetTrigger("Attack01");
@@ -39,51 +35,77 @@ public class EnemyFighter : MonoBehaviour
         
         if(Time.time > cdTimer.nextAttackTime["Attack01"] && canAttack)
         {
+            // play animation 
             animator.SetTrigger("Attack01");
+            // update next attack time
             cdTimer.nextAttackTime["Attack01"] = (int)Time.time + cdTimer.coolDownTime["Attack01"];
+            // cannot do a different attack while still animating
             canAttack = false;
+            // damage this attack causes the player
             damage = strength / 5;
         }
         if (Time.time > cdTimer.nextAttackTime["Attack02"] && canAttack)
         {
+            // play animation 
             animator.SetTrigger("Attack02");
+            // update next attack time
             cdTimer.nextAttackTime["Attack02"] = (int)Time.time + cdTimer.coolDownTime["Attack02"];
+            // cannot do a different attack while still animating
             canAttack = false;
+            // damage this attack causes the player
             damage = strength / 3;
         }
         if (Time.time > cdTimer.nextAttackTime["Attack03"] && canAttack)
         {
+            // play animation 
             animator.SetTrigger("Attack03");
+            // update next attack time
             cdTimer.nextAttackTime["Attack03"] = (int)Time.time + cdTimer.coolDownTime["Attack03"];
+            // cannot do a different attack while still animating
             canAttack = false;
+            // damage this attack causes the player
             damage = strength / 5;
         }
         if (Time.time > cdTimer.nextAttackTime["Attack04"] && canAttack)
         {
+            // play animation 
             animator.SetTrigger("Attack04");
+            // update next attack time
             cdTimer.nextAttackTime["Attack04"] = (int)Time.time + cdTimer.coolDownTime["Attack04"];
+            // cannot do a different attack while still animating
             canAttack = false;
+            // damage this attack causes the player
             damage = strength;
         }
     }
 
     #endregion
+
+    // Method triggered from animation
     void Hit(string sfx)
     {
+        // Play sfx for this attack
         audioManager.Play(attackSoundEffect, transform.position);
+
+        
         if (AtDamagingDistance())
         {
+            // If at attacking distance, damage
             target.TakeDamage(gameObject, damage);
+            // Play sfx on attack hitting the player
             audioManager.Play(sfx, transform.position);
         }
         canAttack = true;
     }
+
+    // Returns true if the player is within attackable distance, else false
     public bool AtDamagingDistance()
     {
         float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
         return distanceToTarget <= damagingDistance;
     }
 
+    // Visualizing attackable distance.
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;

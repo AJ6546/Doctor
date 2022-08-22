@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
+// Displays Health in UI
 public class HealthDisplayUI : MonoBehaviour
 {
     [SerializeField] Health health;

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Disease : MonoBehaviour, ISaveable
 {
-    [SerializeField] string disease;
+    [SerializeField] string disease; // Disease patient has
+    
+    // List of all diseases in the game
     List<string> diseaseLibrary = new List<string>()
     {
         "HYPERTENSION",
@@ -82,6 +84,8 @@ public class Disease : MonoBehaviour, ISaveable
         "LUPUS",
         "SARCOIDOSIS",
     };
+
+    // Dictionary of disease - description
     Dictionary<string,string> diseaseDecription = new Dictionary<string, string>(){
          { "HYPERTENSION","High Blood Pressure is a common condition in which the force of the blood against your artery walls is high enough that it may eventually cause health problems, such as heart disease.\n\n Treatments: Alpha Blockers (15 Days)"}
         ,{ "HIGH CHOLESTROL","When you have high cholesterol, you may develop fatty deposits in your blood vessels. Eventually, these deposits make it difficult for enough blood to flow through your arteries.\n\n Treatments: Strict Excercise, Staints (6 Days)"}
@@ -159,6 +163,7 @@ public class Disease : MonoBehaviour, ISaveable
         ,{ "SARCOIDOSIS","Sarcoidosis is the growth of tiny collections of inflammatory cells (granulomas) in different parts of your body - most commonly the lungs, lymph nodes, eyes and skin.\n\n Treatments: Corticosteroids (15 Days), Immunosuppressive Drugs (23 Days)"}
     };
 
+    // Dictionary of disease - test for disease
     Dictionary<string, string> testForDisease = new Dictionary<string, string>(){
         { "HYPERTENSION","BLOOD PRESSURE TEST" },
         { "HIGH CHOLESTROL","METABOLIC PANEL" },
@@ -236,6 +241,7 @@ public class Disease : MonoBehaviour, ISaveable
         { "SARCOIDOSIS", "X-RAY"},
     };
 
+    // Dictionary of disease - experience gain/lose on diagnosis
     Dictionary<string, int> diseaseExperience = new Dictionary<string, int>() {
         { "HYPERTENSION",5 },
         { "HIGH CHOLESTROL",10 },
@@ -312,6 +318,7 @@ public class Disease : MonoBehaviour, ISaveable
         { "SARCOIDOSIS", 80},
     };
 
+    // dictionary of test - level required
     [SerializeField]
     Dictionary<string, int> levelToRunTest = new Dictionary<string, int>
     {
@@ -356,10 +363,8 @@ public class Disease : MonoBehaviour, ISaveable
     {
         UpdateDisease();
     }
-    object ISaveable.CaptureState()
-    {
-        return disease;
-    }
+
+    // Updates the disease according to player's level
     public void UpdateDisease()
     {
         List<string> diseaseListForCurrentLevel = new List<string>();
@@ -371,13 +376,9 @@ public class Disease : MonoBehaviour, ISaveable
             }
         }
         disease = diseaseListForCurrentLevel[Random.Range(0, diseaseListForCurrentLevel.Count)];
-       // Debug.Log(disease + "---" + testForDisease[disease] + "---" + levelToRunTest[testForDisease[disease]] + "---" + diseaseListForCurrentLevel.Count);
-    }
-    void ISaveable.RestoreState(object state)
-    {
-        disease = (string)state;
     }
 
+    // Getters
     public string GetDescription()
     {
         return diseaseDecription[disease];
@@ -385,12 +386,14 @@ public class Disease : MonoBehaviour, ISaveable
 
     public string GetResult(string test)
     {
+        // if diagnosis is correct player gain exp
         if(test.Equals(testForDisease[disease]))
         {
             Debug.Log(testForDisease[disease]);
             GetComponent<Experience>().GainExperience(GetDiseaseExperience()/2);
             return "The test revealed that the patient could be suffering from " + disease;
         }
+        // if diagnosis is wrong player lose exp
         else
         {
             GetComponent<Experience>().GainExperience(-GetDiseaseExperience()/2);
@@ -411,8 +414,23 @@ public class Disease : MonoBehaviour, ISaveable
     {
         return diseaseExperience[disease];
     }
+
+    // if test can be run for player's current level.
     public bool CanRunTest(string t)
     {
         return levelToRunTest[t] <= GetComponent<CharacterStats>().CurrentLevel() + 2;
+    }
+
+
+    // Saving the disease patient has
+    object ISaveable.CaptureState()
+    {
+        return disease;
+    }
+
+    // Loading the disease patient has
+    void ISaveable.RestoreState(object state)
+    {
+        disease = (string)state;
     }
 }

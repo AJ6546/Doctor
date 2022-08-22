@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Used to rotate a game object in x,y,z directions. Used on pickups.
 public class Rotation : MonoBehaviour
 {
     [SerializeField] float speed = 100f;

@@ -16,18 +16,18 @@ public class Experience : MonoBehaviour, ISaveable
     }
     public void GainExperience(float experience)
     {
+        // if adding the experience would let the character level up above maxLevel 
+        // or minLevel, we do not increment experience.
         if (maxLevel <= GetComponent<CharacterStats>().CalculateLevel()) return;
         if(minLevel>= GetComponent<CharacterStats>().CalculateLevel()) return;
         if (experiencePoints + experience < 0) { experiencePoints = 0; return; }
         
         experiencePoints += experience;
-        onExperienceGained();
+        onExperienceGained(); 
         maxExperience = GetComponent<CharacterStats>().GetStat(Stats.ExperienceToLevelUp);
     }
-    public float GetExperienceFraction()
-    {
-        return experiencePoints / maxExperience;
-    }
+
+    // Getters and Setters for experience and maxExperience
     public float GetExperience()
     {
         return experiencePoints;
@@ -53,7 +53,7 @@ public class Experience : MonoBehaviour, ISaveable
     {
         return experiencePoints;
     }
-
+    // Loading
     public void RestoreState(object state)
     {
         experiencePoints = (float)state;

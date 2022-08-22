@@ -24,15 +24,16 @@ public class DialogueUI : MonoBehaviour
         UpdateUI();
     }
 
+    // Update the UI dialogue pop up
     private void UpdateUI()
     {
         gameObject.SetActive(playerConversant.IsActive());
         if (!playerConversant.IsActive())
             return;
 
-        conversantName.text = playerConversant.GetCurrentConversantName();
-        AIResponse.SetActive(!playerConversant.IsChoosing());
-        choiceRoot.gameObject.SetActive(playerConversant.IsChoosing());
+        conversantName.text = playerConversant.GetCurrentConversantName(); // setting current coversant 
+        AIResponse.SetActive(!playerConversant.IsChoosing()); // AI response is hidden when player is choosing
+        choiceRoot.gameObject.SetActive(playerConversant.IsChoosing()); // choices are shown when playeris chooseing
 
         if(playerConversant.IsChoosing())
         {
@@ -40,12 +41,14 @@ public class DialogueUI : MonoBehaviour
         }
         else
         {
-            AIText.text = playerConversant.GetText();
-            nextButton.gameObject.SetActive(playerConversant.HasNext());
+            AIText.text = playerConversant.GetText(); // Setting dialoge
+            nextButton.gameObject.SetActive(playerConversant.HasNext()); // showing a next button
         }
         
     }
 
+
+    // Building a chooice list with the different options player can chose from
     private void BuildChoiceList()
     {
         foreach (Transform item in choiceRoot)
